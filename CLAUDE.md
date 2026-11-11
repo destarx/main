@@ -230,3 +230,11 @@ tool URLs saved in Firestore with that address are rewritten to the current site
   hanya untuk projek itu dan TIDAK digabungkan ke `firestore.rules` hub (koleksi guru, murid, unit, perjumpaan, program, jawatan, ekstra, pencapaian, tetapan).
 - Pentadbir boleh import fail MENU.xlsx (Pengurusan & Admin > Setup sistem). Jangan commit fail data murid ke repo ini.
 - Entri katalog: `tool_ekoku` dalam `INITIAL_TOOLS` (index.html). Jika katalog sudah disimpan dalam Firestore, tambah melalui Panel Pentadbir (URL `./ekoku/index.html`).
+
+## myMarkah (pautan luar)
+
+- myMarkah (markah ujian, analisis, slip, portal ibu bapa) ialah aplikasi berasingan dalam repo destarx/mymarkah, dihoskan di
+  https://destarx.github.io/mymarkah/ dengan projek Firebase sendiri (`mymarkah`). Hub hanya memautkannya: entri `tool_mymarkah`
+  (KURIKULUM) dalam `INITIAL_TOOLS`. Origin sama (destarx.github.io), jadi `openToolPage()` membukanya dalam tab yang sama.
+- `autoAdd: true` pada entri INITIAL_TOOLS: `loadToolsFromFirebase()` menambahnya ke paparan jika katalog Firestore belum ada id itu,
+  supaya tool baharu muncul tanpa admin menyimpannya dahulu. Simpan melalui Panel Pentadbir > Edit untuk menukar butirannya.

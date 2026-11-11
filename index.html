@@ -1942,6 +1942,7 @@
             { id: 'tool_aktiviti', title: "Daftar Aktiviti", category: 'PENGURUSAN', desc: "Daftar program sekolah; ia dipaparkan dalam kalendar hub.", type: 'URL', url: './aktiviti.html', htmlCode: '', icon: 'fa-solid fa-calendar-days', isPinned: false, order: 6 },
             { id: 'tool_ekokurikulum', title: "e-Kokurikulum", category: 'KOKURIKULUM', desc: "Daftar hadir, laporan mingguan dan pencapaian unit kokurikulum.", type: 'URL', url: './ekokurikulum.html', htmlCode: '', icon: 'fa-solid fa-medal', isPinned: false, order: 7 },
             { id: 'tool_ekoku', title: "eKOKU Laporan Perjumpaan", category: 'KOKURIKULUM', desc: "Laporan perjumpaan unit, kehadiran murid, rumusan kehadiran berserta graf, program dan pencapaian.", type: 'URL', url: './ekoku/index.html', htmlCode: '', icon: 'fa-solid fa-chart-column', isPinned: false, order: 7.5 },
+            { id: 'tool_mymarkah', title: "myMarkah", category: 'KURIKULUM', desc: "Isi markah ujian, analisis subjek, kelas dan darjah, slip keputusan serta portal semakan ibu bapa.", type: 'URL', url: 'https://destarx.github.io/mymarkah/', htmlCode: '', icon: 'fa-solid fa-square-poll-vertical', isPinned: false, order: 7.8, autoAdd: true },
             { id: 'tool_tetapan', title: "Tetapan Sekolah", category: 'PENGURUSAN', desc: "Admin: ubah senarai bilik khas, padanan guru dan senarai Guru Ganti.", type: 'URL', url: './tetapan.html', htmlCode: '', icon: 'fa-solid fa-sliders', isPinned: false, order: 10 },
             { id: 'tool_opr', title: "Jana OPR", category: 'PENGURUSAN', desc: "Hasilkan One Page Report program daripada templat sedia ada.", type: 'URL', url: './opr.html', htmlCode: '', icon: 'fa-solid fa-file-invoice', isPinned: false, order: 8 },
             { id: 'tool_qr-kelas', title: "Cetak Kod QR Kelas", category: 'PENGURUSAN', desc: "Kod QR untuk ditampal di setiap kelas dan bilik khas.", type: 'URL', url: './qr-kelas.html', htmlCode: '', icon: 'fa-solid fa-qrcode', isPinned: false, order: 9 }
@@ -2424,7 +2425,7 @@
             { id: 'PPKI', label: 'PPKI', icon: 'fa-solid fa-hands-holding-child', desc: 'Program Pendidikan Khas Integrasi', old: 'HTML' }
         ];
         const LEGACY_CAT = { PENTADBIRAN: 'PENGURUSAN', PDP: 'KURIKULUM', GRAFIK: 'PENGURUSAN', HTML: 'KURIKULUM' };
-        const LEGACY_TOOL_CAT = { tool_ekokurikulum: 'KOKURIKULUM', tool_ekoku: 'KOKURIKULUM', tool_kehadiran: 'PENGURUSAN', tool_jadual: 'KURIKULUM' };
+        const LEGACY_TOOL_CAT = { tool_ekokurikulum: 'KOKURIKULUM', tool_ekoku: 'KOKURIKULUM', tool_mymarkah: 'KURIKULUM', tool_kehadiran: 'PENGURUSAN', tool_jadual: 'KURIKULUM' };
         function catOf(t) {
             if (!t) return 'PENGURUSAN';
             if (HUB_CATS.some(c => c.id === t.category)) return t.category;
@@ -3189,11 +3190,9 @@
                     return;
                 }
 
-                loaded.sort((a, b) => {
-                    const ao = Number.isFinite(a.order) ? a.order : 9999;
-                    const bo = Number.isFinite(b.order) ? b.order : 9999;
-                    return ao - bo || String(a.title || '').localeCompare(String(b.title || ''));
-                });
+                // Tool baharu bertanda autoAdd dalam INITIAL_TOOLS (cth. myMarkah) dipaparkan walaupun
+                // katalog Firestore disimpan sebelum tool itu wujud. Admin boleh Edit untuk menyimpannya ke Firestore.
+                (INITIAL_TOOLS || []).filter(t => t && t.autoAdd && !loaded.some(x => x.id === t.id)).forEach(t => loaded.push({ ...t }));
 
                 loaded.sort((a, b) => {
                     const ao = Number.isFinite(a.order) ? a.order : 9999;
